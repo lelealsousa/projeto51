@@ -42,11 +42,19 @@ class _AgendamentoEventoTelaState extends State<AgendamentoEventoTela> {
   static const double _convidadosPadrao = 50.0;
   static const Visibilidade _visibilidadePadrao = .private;
 
+  static const Map<String, bool> _servicosPadrao = {
+    'Buffet': false,
+    'Fotógrafo': false,
+    'Decoração': false,
+    'DJ': false,
+  };
+
   late DateTime _dataSelecionada;
   late TimeOfDay _horarioSelecionado;
   late String _tipoEventoSelecionado;
   late double _quantidadeConvidados;
   late Visibilidade _visibilidadeSelecionada;
+  late Map<String, bool> _servicosSelecionados;
 
   @override
   void initState() {
@@ -62,6 +70,7 @@ class _AgendamentoEventoTelaState extends State<AgendamentoEventoTela> {
       _tipoEventoSelecionado = _tipoPadrao;
       _quantidadeConvidados = _convidadosPadrao;
       _visibilidadeSelecionada = _visibilidadePadrao;
+      _servicosSelecionados = Map<String, bool>.from(_servicosPadrao);
           });
           print('[DEBUG] Formulario resetado para os valores padrao.');
 
@@ -77,6 +86,7 @@ class _AgendamentoEventoTelaState extends State<AgendamentoEventoTela> {
        print('Tipo de Evento: $_tipoEventoSelecionado');
        print( 'Estimativa de Covidados: ${_quantidadeConvidados.round()}');
        print('Visibilidade: $_visibilidadeSelecionada');
+       print('Serviços Adicionais: $_servicosSelecionados');
        print('====================================');
 
        ScaffoldMessenger.of(context).showSnackBar(
@@ -256,9 +266,39 @@ RadioGroup<Visibilidade>(
   ), 
 ), 
 const Divider(height: 32),
+
+Text(
+  'Serviços Adicionais',
+  style: Theme.of(context).textTheme.titleMedium,
+), 
+
+Column(
+  children: _servicosSelecionados.keys.map((servico) {
+    return CheckboxListTile(
+      dense: true,
+      title: Text(servico),
+      value: _servicosSelecionados[servico],
+      onChanged: (bool? marcado) {
+        setState(() {
+          _servicosSelecionados[servico] = marcado ?? false;
+        });
+
+        print(
+          '[DEBUG - Checkbox] Serviço "$servico" alterado para: $marcado',
+        );
+      },
+    ); 
+  }).toList(),
+), 
+
+const Divider(height: 32),
 ],
 ), 
 ), 
+
+
+
+ 
 
 
 
